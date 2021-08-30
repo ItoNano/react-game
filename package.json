@@ -36,8 +36,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://itoNano.github.io/react-game/",
   "devDependencies": {
     "gh-pages": "^3.2.3"
-  }
+  },
+  "homepage": "https://ItoNano.github.io/react-game/"
 }
