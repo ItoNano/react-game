@@ -15,3 +15,8 @@ https://ja.reactjs.org/docs/create-a-new-react-app.html
 ```
 npx create-react-app my-app
 ```
+
+### github page設定
+```
+https://qiita.com/EisKern/items/15dcf7864fa49df8f247
+```
