@@ -16,21 +16,50 @@ class Board extends React.Component {
 
     render() {
         return (
-            <div>
-                <div className="board-row">
+            <div className="boardWrapper">
+                <div className="boardWrapper__row">
                     {this.renderSquare(0)}
                     {this.renderSquare(1)}
                     {this.renderSquare(2)}
                 </div>
-                <div className="board-row">
+                <div className="boardWrapper__row">
                     {this.renderSquare(3)}
                     {this.renderSquare(4)}
                     {this.renderSquare(5)}
                 </div>
-                <div className="board-row">
+                <div className="boardWrapper__row">
                     {this.renderSquare(6)}
                     {this.renderSquare(7)}
                     {this.renderSquare(8)}
+                </div>
+            </div>
+        );
+    }
+}
+
+class ButtonArea extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {};
+    }
+    render() {
+        return (
+            <div className="buttonArea">
+                <div
+                    className="buttonArea__back"
+                    onClick={() => {
+                        this.props.backStatus();
+                    }}
+                >
+                    戻る
+                </div>
+                <div
+                    className="buttonArea__go"
+                    onClick={() => {
+                        this.props.goStatus();
+                    }}
+                >
+                    進む
                 </div>
             </div>
         );
@@ -49,6 +78,8 @@ class Game extends React.Component {
             stepNumber: 0,
             xIsNext: true,
         };
+        this.backStatus = this.backStatus.bind(this);
+        this.goStatus = this.goStatus.bind(this);
     }
 
     handleClick(i) {
@@ -76,6 +107,26 @@ class Game extends React.Component {
             xIsNext: step % 2 === 0,
         });
     }
+    statusText() {
+        return '次のプレイヤー';
+    }
+
+    backStatus() {
+        if (this.state.stepNumber !== 0) {
+            this.setState({
+                stepNumber: this.state.stepNumber - 1,
+                xIsNext: !this.state.xIsNext,
+            });
+        }
+    }
+    goStatus() {
+        if (this.state.stepNumber !== this.state.history.length - 1) {
+            this.setState({
+                stepNumber: this.state.stepNumber + 1,
+                xIsNext: !this.state.xIsNext,
+            });
+        }
+    }
 
     render() {
         const history = this.state.history;
@@ -84,29 +135,36 @@ class Game extends React.Component {
 
         const moves = history.map((step, move) => {
             const desc = move ? 'Go to move #' + move : 'Go to game start';
-            return (
-                <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
-                </li>
-            );
+            if (true) {
+                return (<div key={move}></div>)
+            } else {
+                return (
+                    <li key={move}>
+                        <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    </li>
+                );
+            }
         });
+        const gameTitle = <div>マルバツゲーム</div>;
 
         let status;
         if (winner) {
             status = 'Winner: ' + winner;
         } else {
-            status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+            status = this.statusText() + (this.state.xIsNext ? 'X' : 'O');
         }
 
         return (
-            <div className="game">
-                <div className="game-board">
+            <div className="gameWrapper">
+                {gameTitle}
+                <div className="gameWrapper__board">
                     <Board squares={current.squares} onClick={(i) => this.handleClick(i)} />
                 </div>
-                <div className="game-info">
+                <div className="gameWrapper__info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <div>{moves}</div>
                 </div>
+                <ButtonArea backStatus={this.backStatus} goStatus={this.goStatus} />
             </div>
         );
     }
