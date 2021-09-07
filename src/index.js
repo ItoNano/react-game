@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
+import {firebaseApp} from './firebase.js'
 function Square(props) {
     return (
         <button className="square" onClick={props.onClick}>
@@ -132,6 +133,7 @@ class Game extends React.Component {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
+        console.log('テスト', firebaseApp)
 
         const moves = history.map((step, move) => {
             const desc = move ? 'Go to move #' + move : 'Go to game start';
