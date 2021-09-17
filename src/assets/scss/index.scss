@@ -1,7 +1,13 @@
 @import 'flex.scss';
-
+@import 'room.scss';
+@import 'reset.css';
 .gameWrapper {
     @include flex($direction: column, $align: center);
+    margin-top: 6vh;
+    .gameWrapper__title {
+        height: 5vh;
+        margin: auto;
+    }
     .gameWrapper__board {
         position: relative;
         width: 100%;
@@ -45,4 +51,14 @@
 		width: 100%;
 		max-width: 300px;
 	}
+}
+
+.globalHeader {
+    height: 5vh;
+    background: #316c82;
+    color: #fff;
+    @include flex($justify: flex-start);
+    padding: 0 10%;
+    font-size: 20px;
+    box-shadow: 0 0 6px rgb(0, 0, 0 / 50);
 }

@@ -1,0 +1,33 @@
+@import 'flex.scss';
+.gameRoomWrapper {
+    .gameRoomWrapper__title {
+        
+    }
+    @include flex($direction: column, $justify: space-between);
+    .gameRoomWrapper__button {
+        border: 1px solid #000;
+        width: 200px;
+        margin-top: 20%;
+        @include flex;
+        &::after {
+            content: "";
+            padding-top: 30%;
+        }
+    }
+    .gameRoomWrapper__form {
+        border: 1px solid #000;
+        margin-top: 24px;
+        height: 40px;
+    }
+    .gameRoomWrapper__text {
+        font-size: 24px;
+        margin: 24px;
+    }
+}
+.resetButton {
+    text-align: center;
+    margin-top: 20px;
+    width: 200px;
+    border: 1px solid #000;
+    padding: 12px 0;
+}
