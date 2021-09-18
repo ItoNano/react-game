@@ -28,7 +28,7 @@ const OnlineGame = (props) => {
         const squares = gameState.squares.slice();
         if (calculateWinner(squares)) {
             return;
-        } else if (squares[i] && gameState.selected) {
+        } else if (gameState.selected) {
             movePiece(i);
             return;
         } else if (squares[i]) {
@@ -93,7 +93,7 @@ const OnlineGame = (props) => {
             } else if (index === 6) {
                 toArea = [3, 4, 7];
             } else if (index === 7) {
-                toArea = [3, 4, 5, 6, 7];
+                toArea = [3, 4, 5, 6, 8];
             } else if (index === 8) {
                 toArea = [4, 5, 7];
             }

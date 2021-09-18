@@ -4,6 +4,7 @@ import 'firebase/auth';
 import 'firebase/database';
 import Board from './board';
 import ButtonArea from './ButtonArea';
+import PieceArea from './PieceArea';
 const OfflineGame = (props) => {
     const [gameState, setGameState] = useState({
         history: [
@@ -13,6 +14,15 @@ const OfflineGame = (props) => {
         ],
         stepNumber: 0,
         xIsNext: true,
+    });
+    const [myPiece, setMyPiece] = useState({
+        X: {
+            rest: [1, 1, 2, 2, 3, 3],
+        },
+        O: {
+            rest: [1, 1, 2, 2, 3, 3],
+        },
+        set: null,
     });
     if (process.env.REACT_APP_MODE !== 'local') {
         const firebaseConfig = {
@@ -40,7 +50,7 @@ const OfflineGame = (props) => {
         const squares = current.squares.slice();
         if (calculateWinner(squares)) {
             return;
-        } else if (squares[i] && gameState.selected) {
+        } else if (gameState.selected) {
             movePiece(i);
             return;
         } else if (squares[i]) {
@@ -48,7 +58,8 @@ const OfflineGame = (props) => {
             return;
         }
         squares[i] = gameState.xIsNext ? 'X' : 'O';
-        setGameState({
+        setGameState((state) => ({
+            ...state,
             history: history.concat([
                 {
                     squares: squares,
@@ -56,7 +67,8 @@ const OfflineGame = (props) => {
             ]),
             stepNumber: history.length,
             xIsNext: !gameState.xIsNext,
-        });
+            selected: null,
+        }));
     };
 
     const backStatus = () => {
@@ -65,15 +77,18 @@ const OfflineGame = (props) => {
                 ...state,
                 stepNumber: gameState.stepNumber - 1,
                 xIsNext: !gameState.xIsNext,
+                selected: null,
             }));
         }
     };
     const goStatus = () => {
         if (gameState.stepNumber !== gameState.history.length - 1) {
-            setGameState({
+            setGameState((state) => ({
+                ...state,
                 stepNumber: gameState.stepNumber + 1,
                 xIsNext: !gameState.xIsNext,
-            });
+                selected: null,
+            }));
         }
     };
     const calculateWinner = (squares) => {
@@ -95,10 +110,26 @@ const OfflineGame = (props) => {
         }
         return null;
     };
+    const resetGame = () => {
+        const sendState = {
+            squares: JSON.stringify(Array(9).fill(null)),
+            whoNext: Math.random() * 2 > 1 ? 'guest' : 'host',
+            whoWinner: null,
+        };
+        setGameState({
+            history: [
+                {
+                    squares: Array(9).fill(null),
+                },
+            ],
+            stepNumber: 0,
+            xIsNext: true,
+        });
+    };
     const setPiece = (index) => {
         const history = gameState.history;
         const squares = history[gameState.stepNumber].squares.slice();
-        const next = gameState.xIsNext ? 'X' : 'O'
+        const next = gameState.xIsNext ? 'X' : 'O';
         if (squares[index] === next) {
             let toArea = [];
             if (index === 0) {
@@ -116,7 +147,7 @@ const OfflineGame = (props) => {
             } else if (index === 6) {
                 toArea = [3, 4, 7];
             } else if (index === 7) {
-                toArea = [3, 4, 5, 6, 7];
+                toArea = [3, 4, 5, 6, 8];
             } else if (index === 8) {
                 toArea = [4, 5, 7];
             }
@@ -135,7 +166,8 @@ const OfflineGame = (props) => {
         if (gameState.selected.toArea.includes(i)) {
             squares[i] = gameState.xIsNext ? 'X' : 'O';
             squares[gameState.selected.number] = null;
-            setGameState({
+            setGameState((state) => ({
+                ...state,
                 history: history.concat([
                     {
                         squares: squares,
@@ -143,13 +175,24 @@ const OfflineGame = (props) => {
                 ]),
                 stepNumber: history.length,
                 xIsNext: !gameState.xIsNext,
-            });
+                selected: null,
+            }));
         } else {
             setGameState((state) => ({
                 ...state,
                 selected: null,
             }));
         }
+    };
+
+    const usePiece = (item, index) => {
+        setMyPiece((state) => ({
+            ...state,
+            set: {
+                item: item,
+                index: index,
+            },
+        }));
     };
     const history = gameState.history;
     const current = history[gameState.stepNumber];
@@ -174,7 +217,8 @@ const OfflineGame = (props) => {
             <div className="gameWrapper__info">
                 <div>{status}</div>
             </div>
-            <ButtonArea backStatus={backStatus} goStatus={goStatus} />
+            <ButtonArea backStatus={backStatus} goStatus={goStatus} resetGame={resetGame} />
+            {/* <PieceArea usePiece={usePiece} myPiece={myPiece} xIsNext={gameState.xIsNext ? 'X' : 'O'} /> */}
             {isSelected}
         </div>
     );

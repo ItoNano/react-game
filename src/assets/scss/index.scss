@@ -56,7 +56,28 @@
 		@include flex($justify: space-between);
 		width: 100%;
 		max-width: 300px;
+        margin-bottom: 24px;
+        div {
+            @include flex;
+            border: 1px solid #000;
+            height: 40px;
+            width: 40%;
+        }
 	}
+    .pieceArea {
+        @include flex($justify: flex-start, $wrap: wrap);
+        width: 100%;
+        max-width: 300px;
+        .pieceArea__button {
+            border: 1px solid #000;
+            width: calc(100% / 2);
+            height: 40px;
+            @include flex;
+            &--selected {
+                background-color: green;
+            }
+        }
+    }
 }
 
 .globalHeader {

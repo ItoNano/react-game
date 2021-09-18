@@ -1,7 +1,8 @@
 // import { useState, useEffect } from 'react';
 const ButtonArea = (props) => {
     return (
-        <div className="buttonArea">
+        <>
+            <div className="buttonArea">
                 <div
                     className="buttonArea__back"
                     onClick={() => {
@@ -19,6 +20,15 @@ const ButtonArea = (props) => {
                     進む
                 </div>
             </div>
+            <div
+                className="resetButton"
+                onClick={() => {
+                    props.resetGame();
+                }}
+            >
+                リセット
+            </div>
+        </>
     );
-}
+};
 export default ButtonArea;
