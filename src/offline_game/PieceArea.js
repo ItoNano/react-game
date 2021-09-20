@@ -1,6 +1,6 @@
 // import { useState, useEffect } from 'react';
 const PieceArea = (props) => {
-    const restPiece = props.myPiece[props.xIsNext].rest.slice();
+    const restPiece = props.myPiece[props.xIsNext].slice();
     const changeMyPiece = (item, index) => {
         return props.xIsNext.repeat(item, index)
     }
