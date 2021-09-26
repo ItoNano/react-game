@@ -23,6 +23,7 @@ const Online = (props) => {
         appId: process.env.REACT_APP_FIREBASE_APP_ID,
         measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
     };
+    const roomName = process.env.REACT_APP_MODE !== 'local'? 'room' : 'develop'
     if (firebase.apps.length === 0) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -33,7 +34,7 @@ const Online = (props) => {
         let id = String(Math.random()).substr(2, 8).substr(4);
         const hostId = String(Math.random()).substr(2, 8);
         setFirebaseData((state) => ({ ...state, hostId: hostId }));
-        const ref = firebase.database().ref('room/' + id);
+        const ref = firebase.database().ref(roomName + '/' + id);
         const snapshot = await ref.once('value');
         if (snapshot.val()) {
             createRoom();
@@ -48,7 +49,7 @@ const Online = (props) => {
             gameState: '',
         });
         setFirebaseData((state) => ({ ...state, gameStatus: 'wait' }));
-        const wait = firebase.database().ref('room/' + id + '/guestId')
+        const wait = firebase.database().ref(roomName + '/' + id + '/guestId')
         wait.on('value', (snapshot) => {
             const rootList = snapshot.val();
             if (rootList !== 0) {
@@ -64,7 +65,7 @@ const Online = (props) => {
             setFirebaseData((state) => ({ ...state, enterId: '' }));
             return;
         } else {
-            const ref = firebase.database().ref('room/' + firebaseData.enterId);
+            const ref = firebase.database().ref(roomName + '/' + firebaseData.enterId);
             const snapshot = await ref.once('value');
             const sync = snapshot.val();
             if (!sync) {
